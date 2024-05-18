@@ -2,7 +2,7 @@ pipeline{
     agent any
     parameters{
         choice(name: 'VERSION', choices: ['1.0','1.1','1.2'],description: '')
-        boolean(name: 'executeTest', defaultVaule: true , description: '')
+        booleanParam(name: 'executeTest', defaultVaule: true , description: '')
     }
     tools{
         maven "${BUILD_TOOL}"
