@@ -1,37 +1,66 @@
+def gv
 pipeline{
     agent any
+    parameters{
+        choice(name: 'VERSION', choices: ['1.0','1.1','1.2'],description: '')
+        booleanParam(name: 'executeTests', defaultValue: true , description: '')
+    }
     tools{
         maven "${BUILD_TOOL}"
     }
     environment{
+        NEW_VERSION = "${params.VERSION}"
         BUILD_TOOL = 'maven-3.9'
     }
     stages{
-        stage("build jar"){
+        stage("init"){
             steps{
                 script{
-                    echo "building the application..."
-                    sh "mvn package"
+                    gv = load "script.groovy"
                 }
             }
         }
-        stage("build image"){
+        stage("build"){
             steps{
                 script{
-                    echo "building the docker image"
+                    gv.buildApp()
+
                 }
             }
         }
-        stage("deploy"){
+        stage("testing"){
+            when {
+                expression {
+                    params.executeTests
+                }
+            }
             steps{
-                error "error is happened"
                 script{
-                    echo "deploying the application..."
+                    gv.testApp()
+
                 }
                 post{   
                     failure {
                         build "jenkins-task1"
                 }
+                }           
+            }
+        }
+        stage("deploying"){
+            input{
+                message "select the environment"
+                ok 'Done'
+                parameters{
+                    choice(name: 'ONE', choices: ['dev','prod'],description: '')
+                    choice(name: 'TWO', choices: ['dev','prod'],description: '')
+                }
+            }
+            steps{
+                script{
+                    gv.deployApp()
+                    echo "Deploying to ${ONE}"
+                    echo "Deploying to ${TWO}"
+
                 }
             }
         }
