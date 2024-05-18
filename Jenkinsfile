@@ -1,59 +1,60 @@
-def gv
 pipeline{
     agent any
-    parameters{
-        choice(name: 'VERSION', choices: ['1.0','1.1','1.2'],description: '')
-        booleanParam(name: 'executeTests', defaultValue: true , description: '')
+    environment {
+      MY_VARIABLE = 'Hello, world!'
     }
-    tools{
-        maven "${BUILD_TOOL}"
+
+    parameters {
+        // Define parameters
+        string(name: 'USERNAME', defaultValue: '', description: 'Enter your username')
     }
-    environment{
-        NEW_VERSION = "${params.VERSION}"
-        BUILD_TOOL = 'maven-3.9'
-    }
+
     stages{
-        stage("init"){
-            steps{
-                script{
-                    gv = load "script.groovy"
-                }
-            }
-        }
-        stage("build"){
-            steps{
-                script{
-                    gv.buildApp()
 
-                }
-            }
-        }
-        stage("testing"){
-            when {
-                expression {
-                    params.executeTests
-                }
-            }
-            steps{
-                script{
-                    gv.testApp()
+        stage('parameter') {
 
+            steps {
+                echo "Username: ${params.USERNAME}"
                 }
-                post{   
-                    failure {
-                        build "jenkins-task1"
-                }
-                }           
-            }
-        }
-        stage("deploying"){
-            steps{
-                script{
-                    gv.deployApp()
-                    echo "Deploying the application.."
 
+        }
+
+        stage('init'){
+            steps{
+                echo 'init stage'
+            }
+            post {
+                always {
+                    echo "This block always runs after this stage."
                 }
             }
         }
-    }
+            
+        stage('Example Stage') {
+            steps {
+                echo "Value of MY_VARIABLE: ${env.MY_VARIABLE}"
+                }
+        }
+
+        stage('pipline 2'){
+            steps{
+                echo 'puch stage'
+                error "error will happened"
+                }
+            post {
+                failure{
+                build 'yahya'
+                }
+            }
+            
+        }
+
+        stage('deploy'){
+            steps{
+                echo 'deploy stage'
+                }
+            
+        }
+            
+    }
 }
