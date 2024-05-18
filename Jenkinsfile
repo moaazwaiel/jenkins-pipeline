@@ -1,3 +1,4 @@
+def gv
 pipeline{
     agent any
     parameters{
@@ -12,11 +13,16 @@ pipeline{
         BUILD_TOOL = 'maven-3.9'
     }
     stages{
+        stage("init"){
+            steps{
+                script{
+                    gv = load "script.groovy"
+                }
+            }
+        }
         stage("build"){
             steps{
-                echo 'Building The Application'
-                echo "building Version ${NEW_VERSION}"
-                echo "Building tool ${BUILD_TOOL}"
+                gv.buildApp()
             }
         }
         stage("testing"){
@@ -26,13 +32,12 @@ pipeline{
                 }
             }
             steps{
-                echo 'Testing The Application'
+                gv.testApp()
             }
         }
         stage("deploying"){
             steps{
-                echo 'Deploying The Application'
-                echo "deployin version ${params.VERSION}"
+                gv.deployApp()
             }
         }
     }
