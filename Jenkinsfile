@@ -1,10 +1,14 @@
 pipeline{
     agent any
+    parameters{
+        choice(name: 'VERSION', choices: ['1.0','1.1','1.2'],description: '')
+        boolean(name: 'executeTest', defaultVaule: true , description: '')
+    }
     tools{
         maven "${BUILD_TOOL}"
     }
     environment{
-        NEW_VERSION = '1.3.0'
+        NEW_VERSION = "${params.VERSION}"
         BUILD_TOOL = 'maven-3.9'
     }
     stages{
@@ -16,6 +20,11 @@ pipeline{
             }
         }
         stage("testing"){
+            when{
+                expression{
+                    params.executeTest 
+                }
+            }
             steps{
                 echo 'Testing The Application'
             }
@@ -23,6 +32,7 @@ pipeline{
         stage("deploying"){
             steps{
                 echo 'Deploying The Application'
+                echo "deployin version ${params.VERSION}"
             }
         }
     }
