@@ -52,9 +52,7 @@ pipeline{
         stage('deploy'){
             steps{
                 echo 'deploy stage'
-                }
-            
+                }        
         }
-            
     }
 }
