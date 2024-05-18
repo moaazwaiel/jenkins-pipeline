@@ -30,7 +30,7 @@ pipeline{
                 }
                 post{   
                     failure {
-                        build "jenkins-task2"
+                        build "jenkins-task1"
                 }
                 }
             }
