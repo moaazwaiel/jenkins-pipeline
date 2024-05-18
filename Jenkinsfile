@@ -1,16 +1,18 @@
 pipeline{
     agent any
     tools{
-        maven "maven-3.9"
+        maven "${BUILD_TOOL}"
     }
     environment{
         NEW_VERSION = '1.3.0'
+        BUILD_TOOL = 'maven-3.9'
     }
     stages{
         stage("build"){
             steps{
                 echo 'Building The Application'
                 echo "building Version ${NEW_VERSION}"
+                echo "Building tool ${BUILD_TOOL}"
             }
         }
         stage("testing"){
