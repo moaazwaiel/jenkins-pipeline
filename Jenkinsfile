@@ -46,8 +46,8 @@ pipeline{
                 message "select the environment"
                 ok 'Done'
                 parameters{
-                    choice(name: 'ONE', choices: ['dev','prod',description: ''])
-                    choice(name: 'TWO', choices: ['dev','prod',description: ''])
+                    choice(name: 'ONE', choices: ['dev','prod']description: '')
+                    choice(name: 'TWO', choices: ['dev','prod']description: '')
                 }
             }
             steps{
