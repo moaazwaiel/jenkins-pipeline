@@ -54,5 +54,5 @@ pipeline{
                 echo 'deploy stage'
                 }        
         }
-    }
+    }
 }
