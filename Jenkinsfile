@@ -43,7 +43,7 @@ pipeline{
                 }
             post {
                 failure{
-                build 'yahya'
+                build 'jenkins-task1'
                 }
             }
             
